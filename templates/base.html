@@ -1,8 +1,16 @@
 <!DOCTYPE html>
-<title>{% block title %}{% endblock %} - uScope</title>
+<title>{% block title %}{% endblock %} - {{ user_manager.USER_APP_NAME }}</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
     <h1>uScope</h1>
+    <ul>
+        {% if call_or_get(current_user.is_authenticated) %} 
+        <li><a href="{{ url_for('user.edit_user_profile') }}">{{ current_user.username or current_user.email }}</a></li>
+        <li><a href="{{ url_for('user.logout') }}">Sign out</a></li>
+        {% else %}
+        <li><a href="{{ url_for('user.login') }}">Sign in</a></li>
+        {% endif %}
+    </ul>
 </nav>
 <section class="'content">
     <header>

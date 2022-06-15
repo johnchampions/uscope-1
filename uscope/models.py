@@ -1,7 +1,10 @@
 from ast import keyword
-from sqlalchemy import Column, ForeignKey, Integer, String, Float, Boolean, Date
+from http import server
+from sqlalchemy import Column, ForeignKey, Integer, String, Float, Boolean, Date, DateTime
 from sqlalchemy.orm import declarative_base, relationship
+from flask_user import UserMixin
 from .db import Base
+
 
 
 class ConfigKeys(Base):
@@ -119,6 +122,28 @@ class JobResults(Base):
         self.placeid = placeid
         self.joblistid = joblistid
 
+class User(Base, UserMixin):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    active = Column('is_active', Boolean, nullable=False, server_default='1')
+    email = Column(String(255, collation='NOCASE'), nullable=False, unique=True)
+    email_confirmed_at = Column(DateTime())
+    password = Column(String(255), nullable=False, server_default='')
+    first_name = Column(String(100, collation='NOCASE'), nullable=False, server_default='')
+    last_name = Column(String(100, collation='NOCASE'), nullable=False, server_default='')
+    roles = relationship('Role', secondary='user_roles')
+
+class Role(Base):
+    __tablename__ = 'roles'
+    id = Column(Integer(), primary_key=True)
+    name = Column(String(50), unique=True)
+
+class UserRoles(Base):
+    __tablename__ = 'user_roles'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'))
+    role_id = Column(Integer, ForeignKey('roles.id', ondelete='CASCADE'))
+    
 
 
 

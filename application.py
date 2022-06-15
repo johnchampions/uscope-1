@@ -1,8 +1,10 @@
 import os
 from flask import Flask, session
+from flask_user import UserManager
 
 import uscope.gsearch
 import uscope.configure
+from uscope.models import User
 
 
 
@@ -20,6 +22,7 @@ def create_app(test_config=None):
         pass
 
     from uscope.db import db_session
+    user_manager = UserManager(app, db_session, User)
     @app.route('/')
     def hello_world():
         return "<p>uScope is running</p>"
