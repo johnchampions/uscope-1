@@ -144,7 +144,21 @@ class UserRoles(Base):
     user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'))
     role_id = Column(Integer, ForeignKey('roles.id', ondelete='CASCADE'))
     
+class LinkedinUser(Base):
+    __tablename__ = 'linkedin_user'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'))
+    username = Column(String(255))
+    password = Column(String(50))
+    token = Column(String(1000))
+    expiry = Column(DateTime())
 
+    def __init__(self, user_id=None, username=None, password=None, token=None, expiry=None):
+        self.user_id = user_id
+        self.username = username
+        self.password = password
+        self.token = token
+        self.expiry = expiry
 
 
 
